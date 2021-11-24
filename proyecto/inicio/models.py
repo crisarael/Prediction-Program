@@ -12,3 +12,10 @@ class Modelo(models.Model):
 
     def __str__(self):
         return "{}".format(self.Store_Name)
+
+
+# Prueba
+class Document(models.Model):
+    title = models.CharField(max_length = 200)
+    uploadedFile = models.FileField(upload_to = "UploadedFiles/")
+    dateTimeOfUpload = models.DateTimeField(auto_now = True)

@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Url de Index
     path('', views.Index.as_view(), name='Index'),
+    path('upload', views.uploadcsv, name='Upload'),
     # Url para el Crud de Exchange
     path('registrarusuario/', views.RegistrarUsuario, name='regU'),
     # Urls de autentificacion

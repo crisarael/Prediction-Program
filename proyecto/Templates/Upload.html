@@ -1,0 +1,17 @@
+{%extends "blank.html"%}
+{% block Header %}Importar Datos{% endblock Header %}
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="fileTitle" placeholder="Enter a title">
+    <input type="file" name="uploadedFile">
+    <input type="submit" value="Subir">
+</form>
+<table>
+        {% for file in files %}
+            <tr>
+                <td>{{ file }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
