@@ -1,12 +1,27 @@
 {%extends "blank.html"%}
 {% block Header %}Importar Datos{% endblock Header %}
 {% block content %}
-<form action="" method="post" enctype="multipart/form-data">
+
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="fileTitle" placeholder="Enter a title">
-    <input type="file" name="uploadedFile">
-    <input type="submit" value="Subir">
+    <tr><th><label for="id_Nombre">Nombre:</label></th><td><input type="text" name="Nombre" maxlength="100" required id="id_Nombre"></td></tr>
+    <tr><td><input type="file" name="uploadedFile" required id="id_uploadedFile"></td></tr>
+    <input type="submit" value="Submit">
 </form>
+{% if form.errors %}
+  {% for field in form %}
+    {% for error in field.errors %}
+      <div class="alert alert-danger">
+        <li>
+          {% if field != '__all__' %}
+            <strong>{{ field.label }}:</strong>
+          {% endif %}
+          {{ error }}
+        </li>
+      </div>
+    {% endfor %}
+  {% endfor %}
+{% endif %}
 <table>
         {% for file in files %}
             <tr>

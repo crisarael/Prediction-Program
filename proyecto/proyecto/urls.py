@@ -24,6 +24,7 @@ urlpatterns = [
     # Url de Index
     path('', views.Index.as_view(), name='Index'),
     path('upload', views.uploadcsv, name='Upload'),
+    path('detail/<int:pk>', views.DetailCsv.as_view(), name='Detail'),
     # Url para el Crud de Exchange
     path('registrarusuario/', views.RegistrarUsuario, name='regU'),
     # Urls de autentificacion

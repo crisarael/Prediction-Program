@@ -1,20 +1,26 @@
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.views.generic.detail import DetailView
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .form import FormCreateUser
-from .models import Document
+from .form import FormCreateUser, UploadFile
+from .models import Modelo
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import logging
 import csv
-import pandas as pd
 # Create your views here.
 
 
 class Index(LoginRequiredMixin, generic.TemplateView):
     template_name = "index.html"
     login_url = "login"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_user = self.request.user
+        context['list'] = Modelo.objects.filter(Usuario=current_user)
+        return context
 
 
 def RegistrarUsuario(request):
@@ -30,41 +36,59 @@ def RegistrarUsuario(request):
         form = FormCreateUser()
     return render(request, 'register.html', {'form': form})
 
-class Upload(LoginRequiredMixin, generic.TemplateView):
-    template_name = "Upload.html"
+
+class DetailCsv(LoginRequiredMixin, DetailView):
+    model = Modelo
+    template_name = "Detail.html"
     login_url = "login"
 
-def uploadcsv(request):
-    #Contexto de prueba
-    if Document.objects.all():
-        
-        data={"files" : []}
-        with open('UploadedFiles/Titanic.csv') as csvfile:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['files'] = []
+        current_user = self.request.user
+        archivo = Modelo.objects.get(id=self.object.id, Usuario=current_user).uploadedFile.name
+        with open(archivo) as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                data["files"].append(" ".join(row))
+                context["files"].append(" ".join(row))
+        return context
+
+
+def uploadcsv(request):
+    # Contexto de prueba
+    current_user = request.user
+    data = {"files": []}
     if "GET" == request.method:
-        return render(request, "Upload.html", data)
+        form = UploadFile()
+        return render(request, "Upload.html",{'form': form})
+    form = UploadFile(request.POST, request.FILES)
     try:
+        # Corrobora que sea csv
         csv_file = request.FILES["uploadedFile"]
         if not csv_file.name.endswith('.csv'):
-            messages.error(request,'File is not CSV type')
+            messages.error(request, 'File is not CSV type')
             return render(request, "Upload.html", data)
-            #evita archivos grandes
+            # evita archivos grandes
         if csv_file.multiple_chunks():
-            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            messages.error(request, "Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
             return render(request, "Upload.html", data)
         try:
-            #Asigna valores a la tabla
-            fileTitle = request.POST["fileTitle"]
-            uploadedFile = request.FILES["uploadedFile"]
-        # Almacena la informacion en la base de datos
-            document = Document(
-                title = fileTitle,
-                uploadedFile = uploadedFile
-                )
-            document.save()
-            documents = Document.objects.all()
+            # obtiene nombre para comparacion
+            fileTitle = request.POST["Nombre"]
+            # Almacena la informacion en la base de datos
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.Usuario = current_user
+                print(obj)
+                obj.save()
+            else:
+                return render(request, "Upload.html", {'form': form})
+            directory = Modelo.objects.get(Nombre=fileTitle, Usuario=current_user).uploadedFile.name
+            # Lee el archivo
+            with open(directory) as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    data["files"].append(" ".join(row))
         except Exception as e:
             logging.getLogger("error_logger").error()
             pass

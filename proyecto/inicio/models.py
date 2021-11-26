@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 class Modelo(models.Model):
     Usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     Nombre = models.CharField(max_length=100)
-    Ubicacion = models.CharField(max_length=30)
+    uploadedFile = models.FileField(upload_to = "UploadedFiles/")
     Hijos = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)
-    Publico = models.BooleanField(default=True)
+    Publico = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{}".format(self.Store_Name)
+        return "{}".format(self.Nombre)
 
 
 # Prueba

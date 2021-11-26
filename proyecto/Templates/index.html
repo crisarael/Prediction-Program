@@ -1,4 +1,23 @@
 {%extends "blank.html"%}
 {% block Header %}Bienvenido{% endblock Header %}
 {% block content %}
+
+  {% if list %}
+  <table>
+    <tr>
+        <td>Datasets Disponibles</td>
+        <td><a class="small" href="{%url 'Upload'%}">Crear</a></td>
+    </tr>
+    {% for file in list %}
+    <tr>
+        <td>{{ file.Nombre }}</td><td><a class="small" href="{% url 'Detail' file.id %}">Ver</a></td>
+    </tr>
+    {% endfor %}
+      </table>
+  {% else %}
+    <h1>Vaya....</h1>
+    parece que no tienes datasets registrados
+    <br>
+    <a type="submit" href="{%url 'Upload'%}">crear datasets</a>
+  {% endif %}
 {% endblock content %}

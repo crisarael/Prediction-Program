@@ -1,0 +1,12 @@
+{%extends "blank.html"%}
+{% block Header %}{{ object.Nombre }}{% endblock Header %}
+{% block content %}
+
+<table>
+        {% for file in files %}
+            <tr>
+                <td>{{ file }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
