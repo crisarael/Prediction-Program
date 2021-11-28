@@ -1,0 +1,74 @@
+.texto-tabla{
+    margin-top: 2%;
+    color: white;
+    background-color: #4CAF50;
+    display: inline-block;
+    padding: 6px 10px;
+    margin-left: 2%;
+    border-radius: 4px;
+    font-weight: 400px;
+}
+.crear-dataset {
+    padding-left: 1%;
+}
+.no_dataset{
+    padding-left: 41%;
+}
+.texto-corazon{
+    font-weight: bold;
+   font-family:  'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.icono-corazon{
+    font-size: 1300%;
+   color:#C62828;
+}
+.crear-tabla {
+    display:inline-block;
+    padding-left: 1%;
+}
+.tabla{
+    margin-top: 3%;
+}
+.ver{
+    text-decoration: none;
+    color:#2874A6;
+}
+.ver:hover{
+    text-decoration: none;
+    color:  #558B2F;
+}
+.editar{
+    text-decoration: none;
+    color:#2874A6;
+}
+.editar:hover{
+    text-decoration: none;
+    color: #558B2F;
+}
+.eliminar{
+    text-decoration: none;
+    color:#263238;
+}
+.eliminar:hover{
+    text-decoration: none;
+    color: #757575;
+}
+.nombre_letra{
+    font-family: 'Bitter', serif;
+    color:#212F3D ;
+}
+
+.dashboard{
+    padding-left: 40%;
+}
+.sombra-navbar{
+   box-shadow:  0 0.9rem 0.9rem #e5e5e5;
+}
+
+.boton-crear{
+    text-align: center;
+    font-size:2.5rem;
+    width: 21rem;
+    height: 4rem;
+    border-radius: 13px;
+ }
