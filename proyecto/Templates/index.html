@@ -1,23 +1,47 @@
 {%extends "blank.html"%}
-{% block Header %}Bienvenido{% endblock Header %}
+{% block Header %}<i class=" dashboard fas fa-chart-line">Dashboard</i>{% endblock Header %}
 {% block content %}
 
   {% if list %}
-  <table>
-    <tr>
-        <td>Datasets Disponibles</td>
-        <td><a class="small" href="{%url 'Upload'%}">Crear</a></td>
-    </tr>
+
+  <div class="crear-tabla" class="lg"><!--Encabezado de la tabla de dataset -->
+  <a class="btn btn-primary fas fa-plus-circle" href="{%url 'Upload'%}" role="button">Nuevo Dataset</a>
+  </div><!-- Finaliza Encabezado de la tabla de dataset -->
+
+
+
+<div class="tabla"><!-- Tabla donde se muestran los data set disponibles -->
+  <table class="table table-success table-striped"> 
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Ver</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Eliminar</th>
+     </tr>
+    </thead>
     {% for file in list %}
-    <tr>
-        <td>{{ file.Nombre }}</td><td><a class="small" href="{% url 'Detail' file.id %}">Ver</a></td>
-    </tr>
+    <tbody>
+     <tr>
+       <td class="nombre_letra"><i class="fas fa-file-csv"></i>{{file.Nombre}}</td><td><a class="ver fas fa-eye" href="{% url 'Detail' file.id %}"></a></td>
+       <td><a class="editar fas fa-edit" href="#"></a></td>
+       <td><a class="eliminar fas fa-trash" href="#"></a></td>
+     </tr>
+    </tbody>
     {% endfor %}
-      </table>
-  {% else %}
-    <h1>Vaya....</h1>
-    parece que no tienes datasets registrados
+    </table>
+  </div> <!-- Finaliza Tabla donde se muestran los data set disponibles -->
+
+  {% else %}<!-- Data set no disponible -->
+  <section class="no_dataset">
+    <h1>Ups....</h1>
+    <i class="icono-corazon fas fa-heart-broken"></i>
     <br>
-    <a type="submit" href="{%url 'Upload'%}">crear datasets</a>
-  {% endif %}
+    <div class="texto-corazon">Parece que no tienes datasets registrados</div>
+    <hr>
+    <div class="crear-dataset" class="lg">
+    <a type="submit" class="boton-crear btn btn-primary fas fa-plus-circle" href="{%url 'Upload'%}">Crear Datasets</a>
+  </div>
+</section>
+ {% endif %}<!-- Finaliza Data set no disponible -->
 {% endblock content %}
