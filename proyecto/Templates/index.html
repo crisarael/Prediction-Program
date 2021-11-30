@@ -23,9 +23,11 @@
     {% for file in list %}
     <tbody>
      <tr>
-       <td class="nombre_letra"><i class="fas fa-file-csv"></i>{{file.Nombre}}</td><td><a class="ver fas fa-eye" href="{% url 'Detail' file.id %}"></a></td>
+       <td class="nombre_letra"><i class="fas fa-file-csv"></i>{{" "}}{{file.Nombre}}</td><td><a class="ver fas fa-eye" href="{% url 'Detail' file.id %}"></a></td>
        <td><a class="editar fas fa-edit" href="#"></a></td>
-       <td><a class="eliminar fas fa-trash" href="{% url 'Delete' file.id %}"></a></td>
+       <td><button class="eliminar-modal" type="button" data-toggle="modal" data-target="#modal-eliminar"><!-- Button modal eliminar -->
+        <a class="eliminar fas fa-trash" href="#"></a>
+      </button></td><!-- Finaliza Button modal eliminar -->
      </tr>
     </tbody>
     {% endfor %}
@@ -44,4 +46,23 @@
   </div>
 </section>
  {% endif %}<!-- Finaliza Data set no disponible -->
+ 
+<!-- Modal del boton eliminar-->
+<div class="modal fade" id="modal-eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Aviso</h2>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro que deseas eliminar "{{ object }}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Finaliza Modal del boton eliminar-->
 {% endblock content %}

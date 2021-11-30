@@ -57,14 +57,12 @@
     font-family: 'Bitter', serif;
     color:#212F3D ;
 }
-
 .dashboard{
     padding-left: 40%;
 }
 .sombra-navbar{
    box-shadow:  0 0.9rem 0.9rem #e5e5e5;
 }
-
 .boton-crear{
     text-align: center;
     font-size:2.5rem;
@@ -72,3 +70,10 @@
     height: 4rem;
     border-radius: 13px;
  }
+
+ .eliminar-modal{
+background-color: transparent;
+border-radius: 0%;
+border: none;
+
+}
