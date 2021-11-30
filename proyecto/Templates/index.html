@@ -11,7 +11,7 @@
 
 
 <div class="tabla"><!-- Tabla donde se muestran los data set disponibles -->
-  <table class="table table-success table-striped"> 
+  <table class="table table-success table-striped">
     <thead>
       <tr>
         <th scope="col">Nombre</th>
@@ -25,7 +25,7 @@
      <tr>
        <td class="nombre_letra"><i class="fas fa-file-csv"></i>{{file.Nombre}}</td><td><a class="ver fas fa-eye" href="{% url 'Detail' file.id %}"></a></td>
        <td><a class="editar fas fa-edit" href="#"></a></td>
-       <td><a class="eliminar fas fa-trash" href="#"></a></td>
+       <td><a class="eliminar fas fa-trash" href="{% url 'Delete' file.id %}"></a></td>
      </tr>
     </tbody>
     {% endfor %}

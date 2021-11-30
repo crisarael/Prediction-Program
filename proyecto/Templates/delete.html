@@ -1,0 +1,8 @@
+{%extends "blank.html"%}
+{% block Header %}Borrar{% endblock Header %}
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p>Estas seguro de querer borrar "{{ object }}"?</p>
+    <input type="submit" value="Confirm">
+</form>
+{% endblock content %}

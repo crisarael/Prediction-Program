@@ -1,12 +1,23 @@
 {%extends "blank.html"%}
+{% load static%}
 {% block Header %}{{ object.Nombre }}{% endblock Header %}
 {% block content %}
-
-<table>
-        {% for file in files %}
-            <tr>
-                <td>{{ file }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+<table id="example" class="display">
+    <thead>
+        <tr>
+          {% for title in titles%}
+            <th>{{ title }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+          <tr>
+            {% for fil in file%}
+              <td>{{ fil }}</td>
+              {% endfor %}
+          </tr>
+      {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}

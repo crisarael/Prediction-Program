@@ -9,7 +9,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import logging
 import csv
-# Create your views here.
+import pandas
+import json
+from django.urls import reverse_lazy
+from django.views.generic.edit import DeleteView
+
+
+class BorrarCsv(LoginRequiredMixin, DeleteView):
+    model = Modelo
+    success_url = reverse_lazy('Index')
+    login_url = "login"
+    template_name = "delete.html"
 
 
 class Index(LoginRequiredMixin, generic.TemplateView):
@@ -45,12 +55,20 @@ class DetailCsv(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['files'] = []
+        context['titles'] = []
         current_user = self.request.user
         archivo = Modelo.objects.get(id=self.object.id, Usuario=current_user).uploadedFile.name
-        with open(archivo) as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                context["files"].append(" ".join(row))
+        df = pandas.read_csv(archivo)
+        json_values = df.reset_index().to_json(orient ='values')
+        json_columns = df.reset_index().to_json(orient ='columns')
+        print(json_values)
+        print(json_columns)
+        data = []
+        data2 = []
+        data = json.loads(json_values)
+        data2 = json.loads(json_columns)
+        context['files'] = data
+        context['titles'] = data2
         return context
 
 
