@@ -1,6 +1,34 @@
 {%extends "blank.html"%}
 {% load static%}
-{% block Header %}{{ object.Nombre }}{% endblock Header %}
+{% block Header %}{{ object.Nombre }}
+
+  <button type="button" data-toggle="modal" data-target="#modal-eliminar">
+    Compartir
+ </button>
+
+<div class="modal fade" id="modal-eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Aviso</h2>
+      </div>
+      <div class="modal-body">
+        {% if object.Publico == True %}
+        ¿Desea dejar de ser publico {{object.Nombre}}?
+        {% else %}
+        ¿Desea hacer publico {{object.Nombre}}?
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <form method="GET" action="{%url 'MakeItPublic' object.id %}" >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock Header %}
 {% block content %}
 <table id="example" class="display">
     <thead>

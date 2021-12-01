@@ -1,0 +1,35 @@
+{%extends "blank.html"%}
+{% load static%}
+
+{% block Header %}{% if titles %}{{ object.Nombre }}{% endif %}{% endblock Header %}
+{% block content %}
+{% if titles %}
+<table id="example" class="display">
+    <thead>
+        <tr>
+          {% for title in titles%}
+            <th>{{ title }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+          <tr>
+            {% for fil in file%}
+              <td>{{ fil }}</td>
+              {% endfor %}
+          </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% else %}
+
+<section class="no_dataset">
+  <h1>Ups....</h1>
+  <i class="icono-corazon fas fa-heart-broken"></i>
+  <br>
+  <div class="texto-corazon">lo siento, lo que estas buscando no existe</div>
+  <hr>
+</section>
+{% endif %}
+{% endblock content %}

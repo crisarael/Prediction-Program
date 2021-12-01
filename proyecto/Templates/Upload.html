@@ -22,11 +22,23 @@
     {% endfor %}
   {% endfor %}
 {% endif %}
-<table>
-        {% for file in files %}
-            <tr>
-                <td>{{ file }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+
+<table id="example" class="display">
+    <thead>
+        <tr>
+          {% for title in titles%}
+            <th><div contenteditable>{{ title }}</div></th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+          <tr>
+            {% for fil in file%}
+              <td><div contenteditable>{{ fil }}</div></td>
+              {% endfor %}
+          </tr>
+      {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}

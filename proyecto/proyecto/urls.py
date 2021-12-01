@@ -25,6 +25,8 @@ urlpatterns = [
     path('', views.Index.as_view(), name='Index'),
     path('upload', views.uploadcsv, name='Upload'),
     path('detail/<int:pk>', views.DetailCsv.as_view(), name='Detail'),
+    path('share/<int:pk>', views.CompartirCsv.as_view(), name='Share'),
+    path('mip/<int:pk>', views.HacerPublico.as_view(), name='MakeItPublic'),
     path('borrar/<int:pk>', views.BorrarCsv.as_view(), name="Delete"),
     # Url para el Crud de Exchange
     path('registrarusuario/', views.RegistrarUsuario, name='regU'),

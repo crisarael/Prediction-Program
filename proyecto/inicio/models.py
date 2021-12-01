@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+from django.dispatch import receiver
 # Create your models here.
 
 
@@ -14,8 +16,12 @@ class Modelo(models.Model):
         return "{}".format(self.Nombre)
 
 
-# Prueba
-class Document(models.Model):
-    title = models.CharField(max_length = 200)
-    uploadedFile = models.FileField(upload_to = "UploadedFiles/")
-    dateTimeOfUpload = models.DateTimeField(auto_now = True)
+@receiver(models.signals.post_delete, sender=Modelo)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `MediaFile` object is deleted.
+    """
+    if instance.uploadedFile:
+        if os.path.isfile(instance.uploadedFile.path):
+            os.remove(instance.uploadedFile.path)

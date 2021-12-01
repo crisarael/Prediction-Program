@@ -13,6 +13,10 @@ import pandas
 import json
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
+import requests
+import lxml.html as lh
+import pandas as pd
+from bs4 import BeautifulSoup
 
 
 class BorrarCsv(LoginRequiredMixin, DeleteView):
@@ -20,6 +24,17 @@ class BorrarCsv(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('Index')
     login_url = "login"
     template_name = "delete.html"
+
+
+class BorrarDisp(LoginRequiredMixin):
+    login_url = "login"
+
+    def get(self, request, pk):
+        current_user = self.request.user
+        qs = Modelo.objects.get(id=pk, Usuario=current_user)
+        if qs:
+            qs.delete()
+        return Index(render)
 
 
 class Index(LoginRequiredMixin, generic.TemplateView):
@@ -57,25 +72,76 @@ class DetailCsv(LoginRequiredMixin, DetailView):
         context['files'] = []
         context['titles'] = []
         current_user = self.request.user
-        archivo = Modelo.objects.get(id=self.object.id, Usuario=current_user).uploadedFile.name
-        df = pandas.read_csv(archivo)
-        json_values = df.reset_index().to_json(orient ='values')
-        json_columns = df.reset_index().to_json(orient ='columns')
-        print(json_values)
-        print(json_columns)
-        data = []
-        data2 = []
-        data = json.loads(json_values)
-        data2 = json.loads(json_columns)
-        context['files'] = data
-        context['titles'] = data2
+        context['files'] = getTable("values", self.object.Nombre, current_user)
+        context['titles'] = getTable("columns", self.object.Nombre, current_user)
         return context
+
+
+class HacerPublico(LoginRequiredMixin, generic.TemplateView):
+    login_url = "login"
+
+    def get(self, request, pk):
+        current_user = self.request.user
+        qs = Modelo.objects.get(id=pk, Usuario=current_user)
+        if qs.Publico:
+            qs.Publico = False
+        else:
+            qs.Publico = True
+        qs.save()
+        return redirect('Share', pk=qs.id)
+
+
+def publicar(id):
+    qs = Modelo.objects.get(id=id)
+    if not qs.Publico:
+        qs.Publico = True
+    else:
+        qs.Publico = False
+    qs.save()
+
+
+class CompartirCsv(DetailView):
+    model = Modelo
+    template_name = "Share.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if(self.object.Publico):
+            context['files'] = []
+            context['titles'] = []
+            context['files'] = shareTable("values", self.object.id)
+            context['titles'] = shareTable("columns", self.object.id)
+        return context
+
+
+def shareTable(value, id):
+    archivo = Modelo.objects.get(id=id).uploadedFile.name
+    df = pandas.read_csv(archivo)
+    if value == "values":
+        json_values = df.reset_index().to_json(orient ='values')
+    else:
+        json_values = df.reset_index().to_json(orient ='columns')
+    data = []
+    data = json.loads(json_values)
+    return data
+
+
+def getTable(value, name, usuario):
+    archivo = Modelo.objects.get(Nombre=name, Usuario=usuario).uploadedFile.name
+    df = pandas.read_csv(archivo)
+    if value == "values":
+        json_values = df.reset_index().to_json(orient ='values')
+    else:
+        json_values = df.reset_index().to_json(orient ='columns')
+    data = []
+    data = json.loads(json_values)
+    return data
 
 
 def uploadcsv(request):
     # Contexto de prueba
     current_user = request.user
-    data = {"files": []}
+    data = {"files": [], "titles": []}
     if "GET" == request.method:
         form = UploadFile()
         return render(request, "Upload.html",{'form': form})
@@ -101,12 +167,9 @@ def uploadcsv(request):
                 obj.save()
             else:
                 return render(request, "Upload.html", {'form': form})
-            directory = Modelo.objects.get(Nombre=fileTitle, Usuario=current_user).uploadedFile.name
             # Lee el archivo
-            with open(directory) as csvfile:
-                reader = csv.reader(csvfile)
-                for row in reader:
-                    data["files"].append(" ".join(row))
+            data['files'] = getTable("values", fileTitle, current_user)
+            data['titles'] = getTable("columns", fileTitle, current_user)
         except Exception as e:
             logging.getLogger("error_logger").error()
             pass
