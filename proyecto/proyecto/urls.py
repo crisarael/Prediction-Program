@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from inicio import views
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+    path('calculator/', include('calculator.urls', namespace="calculator")),
     path('admin/', admin.site.urls),
     # Url de Index
     path('', views.Index.as_view(), name='Index'),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('share/<int:pk>', views.CompartirCsv.as_view(), name='Share'),
     path('mip/<int:pk>', views.HacerPublico.as_view(), name='MakeItPublic'),
     path('borrar/<int:pk>', views.BorrarCsv.as_view(), name="Delete"),
+    path('tablajson/<int:pk>', views.lista, name="reciv"),
     # Url para el Crud de Exchange
     path('registrarusuario/', views.RegistrarUsuario, name='regU'),
     # Urls de autentificacion
