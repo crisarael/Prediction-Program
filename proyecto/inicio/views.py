@@ -8,15 +8,28 @@ from .models import Modelo
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import logging
-import csv
 import pandas
 import json
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
-import requests
-import lxml.html as lh
-import pandas as pd
-from bs4 import BeautifulSoup
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+def lista(request, pk):
+    id = pk
+    table = getJson(id)
+    return Response(table)
+
+
+def getJson(id):
+    archivo = Modelo.objects.get(id=id).uploadedFile.name
+    df = pandas.read_csv(archivo)
+    json_values = df.reset_index().to_json(orient = 'records')
+    data = []
+    data = json.loads(json_values)
+    return data
 
 
 class BorrarCsv(LoginRequiredMixin, DeleteView):
