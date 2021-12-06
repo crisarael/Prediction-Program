@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from urllib.request import urlopen
 
 
 @api_view(['GET'])
@@ -23,13 +24,14 @@ def lista(request, pk):
     return Response(table)
 
 
-def getJson(id):
-    archivo = Modelo.objects.get(id=id).uploadedFile.name
-    df = pandas.read_csv(archivo)
-    json_values = df.reset_index().to_json(orient = 'records')
-    data = []
-    data = json.loads(json_values)
-    return data
+def subData(request, pk):
+    data = {"files": [], "titles": []}
+    dfjson = getJsonLink("http://127.0.0.1:8000/calculator/recibir/"+str(pk))
+    df = toDf(dfjson)
+    data['files'] = json.loads(df.reset_index(drop=True).to_json(orient='values'))
+    data['titles'] = json.loads(df.reset_index(drop=True).to_json(orient='columns'))
+    print(data['titles'])
+    return render(request, "subData.html", data)
 
 
 class BorrarCsv(LoginRequiredMixin, DeleteView):
@@ -104,15 +106,6 @@ class HacerPublico(LoginRequiredMixin, generic.TemplateView):
         return redirect('Share', pk=qs.id)
 
 
-def publicar(id):
-    qs = Modelo.objects.get(id=id)
-    if not qs.Publico:
-        qs.Publico = True
-    else:
-        qs.Publico = False
-    qs.save()
-
-
 class CompartirCsv(DetailView):
     model = Modelo
     template_name = "Share.html"
@@ -125,30 +118,6 @@ class CompartirCsv(DetailView):
             context['files'] = shareTable("values", self.object.id)
             context['titles'] = shareTable("columns", self.object.id)
         return context
-
-
-def shareTable(value, id):
-    archivo = Modelo.objects.get(id=id).uploadedFile.name
-    df = pandas.read_csv(archivo)
-    if value == "values":
-        json_values = df.reset_index().to_json(orient ='values')
-    else:
-        json_values = df.reset_index().to_json(orient ='columns')
-    data = []
-    data = json.loads(json_values)
-    return data
-
-
-def getTable(value, name, usuario):
-    archivo = Modelo.objects.get(Nombre=name, Usuario=usuario).uploadedFile.name
-    df = pandas.read_csv(archivo)
-    if value == "values":
-        json_values = df.reset_index().to_json(orient ='values')
-    else:
-        json_values = df.reset_index().to_json(orient ='columns')
-    data = []
-    data = json.loads(json_values)
-    return data
 
 
 def uploadcsv(request):
@@ -190,3 +159,55 @@ def uploadcsv(request):
         logging.getLogger("error_logger").error("Unable to upload file. "+repr(e))
         messages.error(request,"Unable to upload file. "+repr(e))
     return render(request, "Upload.html", data)
+
+
+def getJsonLink(link):
+    content = urlopen(link)
+    return content
+
+
+def toDf(js):
+    df = pandas.read_json(js)
+    return df
+
+
+def publicar(id):
+    qs = Modelo.objects.get(id=id)
+    if not qs.Publico:
+        qs.Publico = True
+    else:
+        qs.Publico = False
+    qs.save()
+
+
+def getJson(id):
+    archivo = Modelo.objects.get(id=id).uploadedFile.name
+    df = pandas.read_csv(filepath_or_buffer=archivo, index_col=False)
+    json_values = df.to_json(orient='records')
+    data = []
+    data = json.loads(json_values)
+    return data
+
+
+def shareTable(value, id):
+    archivo = Modelo.objects.get(id=id).uploadedFile.name
+    df = pandas.read_csv(archivo)
+    if value == "values":
+        json_values = df.reset_index(drop=True).to_json(orient='values')
+    else:
+        json_values = df.reset_index(drop=True).to_json(orient='columns')
+    data = []
+    data = json.loads(json_values)
+    return data
+
+
+def getTable(value, name, usuario):
+    archivo = Modelo.objects.get(Nombre=name, Usuario=usuario).uploadedFile.name
+    df = pandas.read_csv(archivo)
+    if value == "values":
+        json_values = df.reset_index(drop=True).to_json(orient='values')
+    else:
+        json_values = df.reset_index(drop=True).to_json(orient='columns')
+    data = []
+    data = json.loads(json_values)
+    return data
