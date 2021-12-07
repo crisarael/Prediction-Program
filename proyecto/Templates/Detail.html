@@ -2,9 +2,10 @@
 {% load static%}
 {% block Header %}{{ object.Nombre }}
 
-  <button type="button" data-toggle="modal" data-target="#modal-eliminar">
-    Compartir
+  <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#modal-eliminar">
+    <i class="fas fa-share-square"> Compartir</i>
  </button>
+
 
 <div class="modal fade" id="modal-eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

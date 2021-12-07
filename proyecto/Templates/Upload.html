@@ -4,9 +4,13 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <tr><th><label for="id_Nombre">Nombre:</label></th><td><input type="text" name="Nombre" maxlength="100" required id="id_Nombre"></td></tr>
-    <tr><td><input type="file" name="uploadedFile" required id="id_uploadedFile"></td></tr>
-    <input type="submit" value="Submit">
+    <div class="lb-nombre">
+    <tr><th><label for="id_Nombre" class="nombre">Nombre:</label></th><td><input type="text" name="Nombre" maxlength="100" required id="id_Nombre"></td></tr>
+  </div>
+    <tr><td"><input  class="btn btn-primary" type="file"  name="uploadedFile" class="col-lg" required id="id_uploadedFile"></td></tr>
+
+    <input type="submit" value="Enviar" class="btn btn-success">
+
 </form>
 {% if form.errors %}
   {% for field in form %}
