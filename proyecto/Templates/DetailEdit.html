@@ -3,11 +3,7 @@
 {% block Header %}
 <form method="POST" action="" >
  {%csrf_token%}
- <input type="text" name="name" maxlength="100" value={{ obj.Nombre }} required id="name">  <button type="submit" class="btn btn-primary">Confirmar</button>{% if object.Publico == True %}
- -Publico
- {% else %}
- -No publico
- {% endif %}
+ <input type="text" name="name" maxlength="100" value={{ obj.Nombre }} required id="name">  <button type="submit" class="btn btn-primary">Confirmar</button>
  </form>
 {% endblock Header %}
 {% block content %}
