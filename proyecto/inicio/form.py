@@ -21,6 +21,16 @@ class FormCreateUser(UserCreationForm):
         return username
 
 
+class FormPlot(forms.Form):
+    id = forms.IntegerField()
+    x = forms.CharField()
+    y = forms.CharField()
+    label = forms.CharField()
+    etiquetas = forms.CharField()
+    metodo = forms.CharField()
+
+
+
 class UploadFile(forms.ModelForm):
 
     class Meta:

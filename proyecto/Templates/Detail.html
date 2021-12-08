@@ -1,11 +1,18 @@
 {%extends "blank.html"%}
 {% load static%}
 {% block Header %}{{ object.Nombre }}
-
+{% if object.Publico == True %}
+-Publico
+{% else %}
+-No publico
+{% endif %}
   <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#modal-eliminar">
     <i class="fas fa-share-square"> Compartir</i>
  </button>
-
+ <a class="btn btn-primary"  href="{%url 'Detaile' object.id %}">Editar
+ </a>
+ <a class="btn btn-primary"  href="{%url 'dwcsv' object.id %}">Descargar
+ </a>
 
 <div class="modal fade" id="modal-eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -16,6 +23,8 @@
       <div class="modal-body">
         {% if object.Publico == True %}
         ¿Desea dejar de ser publico {{object.Nombre}}?
+        <a href="{%url 'Share' object.id %}">url para compartir
+        </a>
         {% else %}
         ¿Desea hacer publico {{object.Nombre}}?
         {% endif %}
@@ -31,6 +40,7 @@
 </div>
 {% endblock Header %}
 {% block content %}
+
 <table id="example" class="display">
     <thead>
         <tr>

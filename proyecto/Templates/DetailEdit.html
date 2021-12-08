@@ -1,10 +1,16 @@
 {%extends "blank.html"%}
 {% load static%}
-
-{% block Header %}{% if titles %}{{ object.Nombre }} <a class="btn btn-primary"  href="{%url 'dwcsvP' object.id %}">Descargar
-</a>{% endif %}{% endblock Header %}
+{% block Header %}
+<form method="POST" action="" >
+ {%csrf_token%}
+ <input type="text" name="name" maxlength="100" value={{ obj.Nombre }} required id="name">  <button type="submit" class="btn btn-primary">Confirmar</button>{% if object.Publico == True %}
+ -Publico
+ {% else %}
+ -No publico
+ {% endif %}
+ </form>
+{% endblock Header %}
 {% block content %}
-{% if titles %}
 <table id="example" class="display">
     <thead>
         <tr>
@@ -23,14 +29,4 @@
       {% endfor %}
     </tbody>
 </table>
-{% else %}
-
-<section class="no_dataset">
-  <h1>Ups....</h1>
-  <i class="icono-corazon fas fa-heart-broken"></i>
-  <br>
-  <div class="texto-corazon">lo siento, lo que estas buscando no existe</div>
-  <hr>
-</section>
-{% endif %}
 {% endblock content %}

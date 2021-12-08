@@ -4,7 +4,8 @@ from calculator import views
 app_name = "calculator"
 
 urlpatterns = [
-    # url para comunicacion con la aplicacion
+    # De prueba que retorna una tabla modificada como hijo(En construccion)
     path('recibir/<int:pk>', views.lista.as_view(), name="reciv"),
-    path('graficar/', views.grafica.as_view(), name="reciv"),
+    # Url que grafica
+    path('graficar/', views.grafica.as_view(), name="graf"),
 ]

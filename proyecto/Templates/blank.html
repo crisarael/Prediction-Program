@@ -21,9 +21,10 @@
     <!-- Page-Level Plugin CSS - Blank -->
 
     <!-- SB Admin CSS - Include with every page -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <link href= "{% static 'css/sb-admin.css'%}" rel="stylesheet">
-    <script src="{% static "js/jquery-1.10.2.js" %}"></script>
-<script src="{% static "js/rango-jquery.js" %}"></script>
+    <script src="{% static 'js/rango-jquery.js'%}"></script>
 </head>
 
 <body>
@@ -84,6 +85,11 @@
 
     <!-- SB Admin Scripts - Include with every page -->
     <script src="{% static 'js/sb-admin.js'%}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+  </script>
     <link rel="stylesheet" type="text/css" href="{% static 'js/DataTables/datatables.min.css'%}">
     <script type="text/javascript" charset="utf8" src="{% static 'js/DataTables/datatables.min.js'%}"></script>
 

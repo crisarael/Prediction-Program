@@ -1,0 +1,58 @@
+{%extends "blank.html"%}
+{% load static%}
+
+{% block Header %}Graficar{% if metodo == "Scatter" %} Scatter  {% elif metodo == "Bar" %} Barras {% else %} Histograma {% endif %}{% endblock Header %}
+{% block content %}
+
+      <form action="" method="POST">
+        {%csrf_token%}
+        <div class="dropdown">
+        <button class="dropdown-toggle" data-toggle="dropdown" href="#">
+        Dropdown <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
+        <button type="submit" name="metodo" value="Scatter" class="dropdown-item">Scatter</button>
+        <button type="submit" name="metodo" value="Histogram" class="dropdown-item">Histogram</button>
+        <button type="submit" name="metodo" value="Bar" class="dropdown-item">Bar</button>
+        </ul>
+      </div>
+      </form>
+    <form action="{% url 'calculator:graf' %}" method="GET">
+    {% if metodo == "Scatter" %}
+    <label hidden for="id_metodo"></label> <input hidden name="metodo" required="" id="id_metodo" value={{metodo}}>
+    <label hidden for="id_id"></label> <input hidden type="number" name="id" required="" id="id_id" value={{list.id}}>
+    <p><label for="id_x">X:</label> <input type="text" name="x" id="id_x"><label for="id_y">Y:</label> <input type="text" name="y" id="id_y"></p>
+    <p><label for="id_label">Label:</label> <input type="text" name="label" id="id_label">
+    <p><label for="id_etiquetas">Etiquetas:</label> <input type="text" name="etiquetas" id="id_etiquetas"></p>
+    {% elif metodo == "Bar" %}
+    <label hidden for="id_metodo"></label> <input hidden name="metodo" required="" id="id_metodo" value={{metodo}}>
+    <label hidden for="id_id"></label> <input hidden type="number" name="id" required="" id="id_id" value={{list.id}}>
+    <p><label for="id_x">X:</label> <input type="text" name="x" id="id_x"><label for="id_y">Y:</label> <input type="text" name="y" id="id_y"></p>
+    {% else %}
+    <label hidden for="id_metodo"></label> <input hidden name="metodo" required="" id="id_metodo" value="Histogram">
+    <label hidden for="id_id"></label> <input hidden type="number" name="id" required="" id="id_id" value={{list.id}}>
+    <p><label for="id_x">X:</label> <input type="text" name="x" id="id_x">
+    <p><label for="id_label">Label:</label> <input type="text" name="label" id="id_label">
+    <p><label for="id_etiquetas">Etiquetas:</label> <input type="text" name="etiquetas" id="id_etiquetas"></p>
+    {% endif %}
+    <button type="submit">Submit</button>
+  </form>
+  <table id="example" class="display">
+      <thead>
+          <tr>
+            {% for title in titles%}
+              <th>{{ title }}</th>
+              {% endfor %}
+          </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+            <tr>
+              {% for fil in file%}
+                <td>{{ fil }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+      </tbody>
+  </table>
+{% endblock content %}

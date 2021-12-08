@@ -16,7 +16,7 @@
       <tr>
         <th scope="col">Nombre</th>
         <th scope="col">Ver</th>
-        <th scope="col">Editar</th>
+        <th scope="col">Graficar</th>
         <th scope="col">Eliminar</th>
      </tr>
     </thead>
@@ -24,7 +24,7 @@
     <tbody>
      <tr>
        <td class="nombre_letra"><i class="fas fa-file-csv"></i>{{" "}}{{file.Nombre}}</td><td><a class="ver fas fa-eye" href="{% url 'Detail' file.id %}"></a></td>
-       <td><a class="editar fas fa-edit" href="#"></a></td>
+       <td><a class="fas fa-fw fa-chart-area" href="{% url 'graf' file.id %}"></a></td>
        <td><button class="eliminar-modal" type="button" data-toggle="modal" data-target="#modal-eliminar{{file.id}}"><!-- Button modal eliminar -->
         <a class="eliminar fas fa-trash" href="#"></a>
       </button></td><!-- Finaliza Button modal eliminar -->
