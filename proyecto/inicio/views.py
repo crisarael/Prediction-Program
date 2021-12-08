@@ -48,7 +48,7 @@ def lista(request, pk):
 @api_view(['GET'])
 def listaPublica(request, pk):
     id = pk
-    obj = Modelo.objects.filter(id=id)
+    obj = Modelo.objects.get(id=id)
     if obj.Publico is True:
         table = getJson(id)
         return Response(table)
@@ -60,7 +60,7 @@ def listaPublica(request, pk):
 @authentication_classes([SessionAuthentication])
 def eliminarLista(request, pk):
     id = pk
-    obj = Modelo.objects.filter(id=id, Usuario=request.user)
+    obj = Modelo.objects.get(id=id, Usuario=request.user)
     if obj:
         obj.delete()
         return Response({"data":"Se a eliminado con exito"})
