@@ -12,7 +12,7 @@ from django.shortcuts import render
 # Retorna un json modificado
 class lista(views.APIView):
     def get(self, request, pk):
-        dfjson = getJsonLink("http://127.0.0.1:8000/tablajson/"+str(pk))
+        dfjson = getJsonLink("http://http://18.223.168.74:8080/tablajson/"+str(pk))
         df = toDf(dfjson)
         # Codigo para modificar el json
         print(df)
