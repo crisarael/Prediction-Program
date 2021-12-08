@@ -24,7 +24,7 @@ class grafica(generic.TemplateView):
     def get(self, request, **kwargs):
         context = super().get_context_data(**kwargs)
         id = request.GET.get('id')
-        dfjson = getJsonLink("http://127.0.0.1:8000/tablajson/"+id)
+        dfjson = getJsonLink("http://18.223.168.74:8080/tablajson/"+id)
         df = toDf(dfjson)
         x = request.GET.get('x')
         y = request.GET.get('y')
