@@ -57,7 +57,7 @@ def listaPublica(request, pk):
 
 # Api que borra un modelo con autorizacion del usuario
 @api_view(['GET'])
-@authentication_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def eliminarLista(request, pk):
     id = pk
     obj = get_object_or_404(Modelo,id=id, Usuario=request.user)
